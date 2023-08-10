@@ -214,7 +214,9 @@ Departments ROUTES
 ----------------------------
 */
 
-// SELECT operation
+/*
+    SELECT operation
+*/ 
 app.get('/departments', function(req, res){
     // Declare Query 1
     let query1;
@@ -256,7 +258,43 @@ Professors ROUTES
 ----------------------------
 */
 
-// SELECT operation
+/*
+    SELECT operation
+*/ 
+app.get('/professors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.className === undefined)
+    {
+        query1 = "SELECT * FROM Professors;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Professors WHERE lastName LIKE "${req.query.lastName}%"`
+    }
+
+    // Query 2 is the same in both cases
+    let query2 = "SELECT * FROM Professors;";
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the departments
+        let professors = rows
+
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+
+            // Save the departments
+            let professors = rows;
+            res.render('professors', {data: professors})
+        })
+    })
+});
 
 
 /*
