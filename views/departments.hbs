@@ -1,0 +1,102 @@
+{{!-- Create a table --}}
+<h2>Departments</h2>
+    <p>This is our Departments Table, and we are demonstrating CRUD operations for this Table</p>
+<table id="class-table" border = "1" cellpadding = "5">
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the departmentID and the departmentName --}}
+        {{#each data}}
+        <tr data-value={{this.departmentID}}>
+            <td>{{this.departmentID}}</td>
+            <td>{{this.departmentName}}</td>
+            <td><button onclick="deleteDepartment({{this.departmentID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_department.js"></script>
+
+
+{{!-- Form to search for a class record in the table --}}
+
+
+<h2>Search for a Deparment</h2>
+<p>Search by the department name using the field below. Partial class names are OK too!</p>
+<form id = "search-class-html" method = 'GET' action = '/'>
+    <label for "input-departmentName">Search by Class Name: </label>
+    <input type = "text" name = "departmentName" id = "input-departmentName-html-search">
+
+    <input type = "submit">
+    <a href ='/departments'><button>Reset</button></a>
+</form>
+
+{{!-- Form to add a record to the Classes table  --}}
+
+<h2>Add a Department</h2>
+<p>To add a new Department, please enter their information below and click 'Submit'!</p>
+<form id="add-class-form-ajax">
+    <label for="input-className">Class Name: </label>
+    <input type="text" name="input-className" id="input-className">
+    
+    <label for="input-credit">Credit: </label>
+    <input type="number" name="input-credit" id="input-credit">
+
+    <label for="input-departmentID">Department ID: </label>
+    <select name = "input-departmentID" id = "input-departmentID-ajax">
+        <option value = "">Select a Department</option>
+        {{#each departments}}
+        <option value = "{{this.departmentID}}">{{this.departmentName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-professorID">Professor ID: </label>
+    <input type="number" name="input-professorID" id="input-professorID">
+
+    <input type="submit">
+</form>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_class.js"></script>
+
+
+{{!-- Form to Update the Credit of a record in the Classes table  --}}
+
+<h2>Updating A Department Form</h2>
+<p>To update a specific Department's name select the department name from the drop-down menu on the left and fill in the name on the right.</p>
+<form id="update-class-form-ajax">
+
+    <label for="input-className">Class name: </label>
+    <select name="input-className" id="mySelect">
+        <option value="test">Select a Class</option>
+        {{#each data}}
+        <option value="{{this.classID}}">{{this.className}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-professor">Professor: </label>
+    <select name="input-professor" id="input-professor-update">
+        <option>Select a Professor</option>
+        {{#each professors}}
+        <option value="{{this.professorID}}">{{this.lastName}}</option>
+        {{/each}}
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_class.js"></script>

@@ -28,12 +28,21 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
     ROUTES
 */
 
+/*
+----------------------------
+CLASSES ROUTES 
+----------------------------
+*/
 
 /*
-    SEARCH opeartions for classes.
+    SEARCH operations
 */
 app.get('/', function(req, res)
 {
+    res.render('index')
+});
+
+app.get('/classes', function(req, res){
     // Declare Query 1
     let query1;
 
@@ -63,14 +72,14 @@ app.get('/', function(req, res)
 
             // Save the departments
             let departments = rows;
-            return res.render('index', {data: classes, departments: departments})
+            res.render('classes', {data: classes, departments: departments})
         })
     })
 });
 
 
 /*
-    INSERT Operations for Classes
+    INSERT Operations 
 */
 
 app.post('/add-class-ajax', function(req, res) 
@@ -126,7 +135,7 @@ app.post('/add-class-ajax', function(req, res)
     });
 
 /*
-    DELETE OPERATION for Classes
+    DELETE OPERATION
 */
 
 app.delete('/delete-class-ajax/', function(req,res,next){
@@ -161,7 +170,7 @@ app.delete('/delete-class-ajax/', function(req,res,next){
   })});
 
 /*
-  UPDATE OPERATION for Classes
+  UPDATE OPERATION 
 */
 
 app.put('/put-class-ajax', function(req,res,next){
@@ -198,6 +207,57 @@ app.put('/put-class-ajax', function(req,res,next){
                   })
               }
   })});
+
+/*
+----------------------------
+Departments ROUTES 
+----------------------------
+*/
+
+// SELECT operation
+app.get('/departments', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.className === undefined)
+    {
+        query1 = "SELECT * FROM Departments;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Departments WHERE departmentName LIKE "${req.query.departmentName}%"`
+    }
+
+    // Query 2 is the same in both cases
+    let query2 = "SELECT * FROM Departments;";
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fiels){
+
+        // Save the departments
+        let departments = rows
+
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+
+            // Save the departments
+            let departments = rows;
+            res.render('departments', {data: departments})
+        })
+    })
+})
+
+/*
+----------------------------
+Professors ROUTES 
+----------------------------
+*/
+
+// SELECT operation
+
 
 /*
     LISTENER
