@@ -296,6 +296,29 @@ app.get('/professors', function(req, res){
     })
 });
 
+/*
+----------------------------
+StudentsHasProfessors ROUTES 
+----------------------------
+*/
+app.get('/studentsHasProfessors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.studentsHasProfessorsID === undefined)
+    {
+        query1 = "SELECT * FROM Students_has_Professors;";
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the results
+        let studentsHasProfessors = rows;
+        res.render('students_has_professors', {data: studentsHasProfessors})
+    })
+});
 
 /*
     LISTENER
