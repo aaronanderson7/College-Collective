@@ -1,7 +1,7 @@
 {{!-- Create a table --}}
 <h2>Departments</h2>
     <p>This is our Departments Table, and we are demonstrating CRUD operations for this Table</p>
-<table id="class-table" border = "1" cellpadding = "5">
+<table id="department-table" border = "1" cellpadding = "5">
     {{!-- Header section --}}
     <thead>
 
@@ -35,7 +35,7 @@
 
 {{!-- Form to search for a class record in the table --}}
 
-
+{{!-- 
 <h2>Search for a Deparment</h2>
 <p>Search by the department name using the field below. Partial class names are OK too!</p>
 <form id = "search-class-html" method = 'GET' action = '/'>
@@ -44,34 +44,19 @@
 
     <input type = "submit">
     <a href ='/departments'><button>Reset</button></a>
-</form>
+</form> --}}
 
 {{!-- Form to add a record to the Classes table  --}}
 
 <h2>Add a Department</h2>
-<p>To add a new Department, please enter their information below and click 'Submit'!</p>
-<form id="add-class-form-ajax">
-    <label for="input-className">Class Name: </label>
-    <input type="text" name="input-className" id="input-className">
-    
-    <label for="input-credit">Credit: </label>
-    <input type="number" name="input-credit" id="input-credit">
-
-    <label for="input-departmentID">Department ID: </label>
-    <select name = "input-departmentID" id = "input-departmentID-ajax">
-        <option value = "">Select a Department</option>
-        {{#each departments}}
-        <option value = "{{this.departmentID}}">{{this.departmentName}}</option>
-        {{/each}}
-    </select>
-
-    <label for="input-professorID">Professor ID: </label>
-    <input type="number" name="input-professorID" id="input-professorID">
-
+<p>To add a new Department, please enter the information below and click 'Submit'!</p>
+<form id="add-department-form-ajax">
+    <label for="input-departmentName">Department Name:</label>
+    <input type="text" name="input-departmentName" id="input-departmentName">
     <input type="submit">
 </form>
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
-<script src="./js/add_class.js"></script>
+<script src="./js/add_department.js"></script>
 
 
 {{!-- Form to Update the Credit of a record in the Classes table  --}}
