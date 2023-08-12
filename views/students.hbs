@@ -1,0 +1,97 @@
+<!-- students.hbs -->
+
+{{!-- Create a table --}}
+
+<table id = "student-table" border = "1" cellpadding = "5">
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the studentID, lastName, email, startDate, graduationDate in order --}}
+        {{#each data}}
+        <tr data-value = {{this.studentID}}>>
+            <td>{{this.studentID}}</td>
+            <td>{{this.lastName}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.startDate}}</td>
+            <td>{{this.graduationDate}}</td>
+            <td><button onclick="deleteStudent({{this.studentID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_student.js"></script>
+
+{{!-- Form to search for a student record in the table --}}
+
+<h2>Search for a Student</h2>
+<p>Search for a Student by their last name using the field below. Partial last names are OK too!</p>
+<form id = "search-student-html" method = 'GET' action = '/'>
+    <label for "input-lastName">Search by Last Name: </label>
+    <input type = "text" name = "lastName" id = "input-lastName-html-search">
+
+    <input type = "submit">
+    <a href = '/students'><button>Reset</button></a>
+</form>
+
+
+{{!-- Form to add a record to the Students table  --}}
+
+<h2>Add a Student</h2>
+<p>To add a new Student, please enter their information below and click 'Submit'!</p>
+<form id="add-student-form-ajax">
+    <label for="input-lastName">Last Name: </label>
+    <input type="text" name="input-lastName" id="input-lastName-ajax">
+    
+    <label for="input-email">Email: </label>
+    <input type="text" name="input-email" id="input-email-ajax">
+
+    <label for="input-startDate">Start Date: </label>
+    <input type = "date" name = "input-startDate" id = "input-startDate-ajax">
+    
+    <label for="input-graduationDate">Graduation Date: </label>
+    <input type = "date" name = "input-graduationDate" id = "input-graduationDate-ajax">
+
+    <input type="submit">
+</form>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_student.js"></script>
+
+
+{{!-- Form to Update the graduationDate of a record in the Students table  --}}
+
+<h2>Updating A Student's Graduation Date </h2>
+<p>To update a specific Student's Graduation Date select the student last name from the drop-down menu on the left and input their desired graduation date on the right.</p>
+
+<form id="update-student-form-ajax">
+
+    <label for="input-lastName">Last name: </label>
+    <select name="input-lastName" id="mySelectStudent">
+        <option value="test">Select a Student</option>
+        {{#each data}}
+        <option value="{{this.studentID}}">{{this.lastName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-graduationDate">Graduation Date: </label>
+    <input type = "date" name = "input-graduationDate" id = "input-graduationDate-update">
+    
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_student.js"></script>

@@ -1,5 +1,5 @@
 // Get the objects we need to modify
-let updateClassForm = document.getElementById('update-class-form-ajax');
+let updateStudentForm = document.getElementById('update-student-form-ajax');
 
 // Modify the objects we need
 updateClassForm.addEventListener("submit", function (e) {
@@ -8,17 +8,17 @@ updateClassForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
     // Get form fields we need to get data from
-    let inputClassName = document.getElementById("mySelectClass");
-    let inputProfessor = document.getElementById("input-professor-update");
+    let inputlastName = document.getElementById("mySelectStudent");
+    let inputGraduationDate = document.getElementById("input-graduationDate-update");
 
     // Get the values from the form fields
-    let classNameValue = inputClassName.value;
-    let professorValue = inputProfessor.value;
+    let lastNameValue = inputLastName.value;
+    let graduationDateValue = inputGraduationDate.value;
     
     // currently the database table for bsg_people does not allow updating values to NULL
     // so we must abort if being bassed NULL for homeworld
 
-    if (isNaN(professorValue)) 
+    if (isNaN(graduationDateValue)) 
     {
         return;
     }
@@ -26,13 +26,13 @@ updateClassForm.addEventListener("submit", function (e) {
 
     // Put our data we want to send in a javascript object
     let data = {
-        className: classNameValue,
-        professor: professorValue,
+        lastName: lastNameValue,
+        graduationDate: graduationDateValue,
     }
     
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "/put-class-ajax", true);
+    xhttp.open("PUT", "/put-student-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
 
     // Tell our AJAX request how to resolve
