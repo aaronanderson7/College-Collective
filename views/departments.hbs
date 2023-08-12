@@ -59,29 +59,23 @@
 <script src="./js/add_department.js"></script>
 
 
-{{!-- Form to Update the Credit of a record in the Classes table  --}}
+{{!-- Form to Update a Department --}}
 
 <h2>Updating A Department Form</h2>
-<p>To update a specific Department's name select the department name from the drop-down menu on the left and fill in the name on the right.</p>
-<form id="update-class-form-ajax">
+<p>To update a specific Department's name, select the department name from the drop-down menu on the left and fill in the new name you would like on the right.</p>
+<form id="update-department-form-ajax">
 
-    <label for="input-className">Class name: </label>
-    <select name="input-className" id="mySelect">
-        <option value="test">Select a Class</option>
+    <label for="input-departmentName">Department Name: </label>
+    <select name="input-departmentName" id="mySelect">
+        <option value="test">Select a Department</option>
         {{#each data}}
-        <option value="{{this.classID}}">{{this.className}}</option>
+        <option value="{{this.departmentID}}">{{this.departmentName}}</option>
         {{/each}}
     </select>
-
-    <label for="input-professor">Professor: </label>
-    <select name="input-professor" id="input-professor-update">
-        <option>Select a Professor</option>
-        {{#each professors}}
-        <option value="{{this.professorID}}">{{this.lastName}}</option>
-        {{/each}}
-    </select>
+    <label for="input-newDepartmentName">New Department Name</label>
+    <input type="text" name="input-newDepartmentName" id="input-newDepartmentName">
+    
     <input type="submit">
 
 </form>
-
-<script src="./js/update_class.js"></script>
+<script src="./js/update_department.js"></script>

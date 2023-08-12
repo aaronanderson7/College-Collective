@@ -252,6 +252,9 @@ app.get('/departments', function(req, res){
     })
 });
 
+/*
+INSERT Operation
+*/
 app.post('/add-department-ajax', function(req, res) 
     {
         // Capture the incoming data and parse it back to a JS object
@@ -291,6 +294,32 @@ app.post('/add-department-ajax', function(req, res)
             }
         })
     });
+
+/*
+UPDATE Operation
+*/
+app.put('/put-department-ajax', function(req,res,next){
+    let data = req.body;
+    
+    let newDepartmentName = data.newDepartmentName;
+    let departmentID = data.departmentID;
+
+    let queryUpdateDepartment = `UPDATE Departments SET Departments.departmentName = ? WHERE Departments.departmentID= ?`;
+          // Run the 1st query
+          db.pool.query(queryUpdateDepartment, [newDepartmentName, departmentID], function(error, rows, fields){
+              if (error) {
+  
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error);
+                res.sendStatus(400);
+              }
+  
+              // If there was no error, update the row on the frontend 
+              else
+              {
+                res.send(rows);
+              }
+  })});
 
 
 /*
