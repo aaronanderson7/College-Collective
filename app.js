@@ -296,6 +296,28 @@ app.post('/add-department-ajax', function(req, res)
     });
 
 /*
+DELETE Operation
+*/
+app.delete('/delete-department-ajax/', function(req,res,next){
+    let data = req.body;
+    let departmentID = parseInt(data.departmentID);
+    let deleteDepartment = `DELETE FROM Departments WHERE departmentID = ?`
+  
+          // Run the 1st query
+    db.pool.query(deleteDepartment, [departmentID], function(error, rows, fields){
+    if (error) {
+  
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+    }else {
+        res.sendStatus(204);
+    }
+  })});
+
+
+
+/*
 UPDATE Operation
 */
 app.put('/put-department-ajax', function(req,res,next){
