@@ -101,6 +101,7 @@ addRowToTable = (data) => {
     row.appendChild(startDateCell);
     row.appendChild(graduationDateCell);
 
+    // Fixes the delete button not showing up.
     row.appendChild(deleteCell);
     
 
@@ -116,7 +117,7 @@ addRowToTable = (data) => {
     let selectMenu = document.getElementById("mySelectStudent");
     let option = document.createElement("option");
     option.text = newRow.lastName;
-    option.value = newRow.graduationDate;
+    option.value = newRow.studentID;
     selectMenu.add(option);
     // End of new step 8 code.
 

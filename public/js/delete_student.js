@@ -1,6 +1,6 @@
 // Code for deleteClass function using jQuery
 
-function deleteClass(studentID) {
+function deleteStudent(studentID) {
     // Put our data we want to send in a javascript object
     let data = {
         id: studentID

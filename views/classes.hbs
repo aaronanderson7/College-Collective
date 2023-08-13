@@ -43,7 +43,7 @@
 
 <h2>Search for a Class</h2>
 <p>Search by the class name using the field below. Partial class names are OK too!</p>
-<form id = "search-class-html" method = 'GET' action = '/'>
+<form id = "search-class-html" method = 'GET' action = '/classes'>
     <label for "input-className">Search by Class Name: </label>
     <input type = "text" name = "className" id = "input-className-html-search">
 
@@ -73,7 +73,7 @@
     <label for="input-professorID">Professor ID: </label>
     <select name = "input-professorID" id = "input-professorID-ajax">
         <option value = "">Select a Professor</option>
-        {{#each professor}}
+        {{#each professors}}
         <option value = "{{this.professorID}}">{{this.lastName}}</option>
         {{/each}}
     </select>

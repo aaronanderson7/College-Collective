@@ -53,11 +53,10 @@ addClassForm.addEventListener("submit", function (e) {
     // Send the request and wait for the response
     xhttp.send(JSON.stringify(data));
 
-})
+});
 
 
-// Creates a single row from an Object representing a single record from 
-// bsg_people
+// Creates a single row from an Object representing a single record from Classes
 addRowToTable = (data) => {
 
     // Get a reference to the current table on the page and clear it out.
