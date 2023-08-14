@@ -11,8 +11,6 @@ updateDepartmentForm.addEventListener("submit", function (e) {
     let inputDepartmentID = document.getElementById("mySelect");
     let newDepartmentName = document.getElementById("input-newDepartmentName")
 
-    console.log("hey");
-    console.log(`${inputDepartmentID.value}, ${newDepartmentName.value}`);
 
     // Get the values from the form fields
     let departmentIDValue = inputDepartmentID.value;
