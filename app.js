@@ -562,6 +562,31 @@ app.post('/add-studentHasProfessor-ajax', function(req, res){
 })
 
 /*
+    UPDATE Operation
+*/
+app.put('/put-student-has-professor-ajax', function(req, res){
+    let data = req.body;
+
+    let studentID = data.studentID;
+    let professorID = data.professorID
+    let studentHasProfessorID = data.studentHasProfessorID;
+
+    let queryUpdateStudentHasProfessors = `UPDATE Students_has_Professors 
+    SET Students_has_Professors.studentID = ?, Students_has_Professors.professorID = ? 
+    WHERE Students_has_Professors.StudentHasProfessorID = ?`;
+
+    db.pool.query(queryUpdateStudentHasProfessors, [studentID, professorID, studentHasProfessorID], function(error, rows, fields){
+        if(error){
+            console.log(error);
+            res.sendStatus(400);
+        }
+        else {
+            res.send(rows);
+        }
+    })
+})
+
+/*
 DELETE Operation
 */
 app.delete('/delete-student-has-professor-ajax', function(req,res,next){
@@ -581,8 +606,11 @@ app.delete('/delete-student-has-professor-ajax', function(req,res,next){
         }
   })});
 
+
 /*
+----------------------------
   STUDENTS ROUTES
+----------------------------
 */
 
 app.get('/students', function(req, res)
@@ -725,10 +753,14 @@ app.put('/put-class-ajax', function(req,res,next){
 })});
 
 
-/* Students_has_Classes BACKEND */
+/* 
+--------------------------------
+    Students_has_Classes ROUTES
+--------------------------------
+*/
 
 app.get('/students-has-classes', function(req, res)
-    {  
+{  
         let query1 = "SELECT * FROM Students_has_CLasses;";                 // Define our query
 
         db.pool.query(query1, function(error, rows, fields){    // Execute the query
