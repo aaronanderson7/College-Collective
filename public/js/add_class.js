@@ -1,8 +1,8 @@
 // Get the objects we need to modify
-let addClassForm = document.getElementById('add-class-form-ajax');
+let addDepartmentForm = document.getElementById('add-class-form-ajax');
 
 // Modify the objects we need
-addClassForm.addEventListener("submit", function (e) {
+addDepartmentForm.addEventListener("submit", function (e) {
     
     // Prevent the form from submitting
     e.preventDefault();

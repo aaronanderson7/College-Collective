@@ -1,5 +1,8 @@
 // App.js
 
+//Dotenv 
+require('dotenv').config();
+
 
 // Database
 var db = require('./database/db-connector');
@@ -9,12 +12,12 @@ var db = require('./database/db-connector');
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(express.static('public'))
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static('public'));
 
 
-PORT        = 4779;                 // Set a port number at the top so it's easy to change in the future
+PORT = process.env.PORT;                 // Set a port number at the top so it's easy to change in the future
 
 const { engine } = require('express-handlebars');
 var exphbs = require('express-handlebars');     // Import express-handlebars
@@ -25,9 +28,14 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
     ROUTES
 */
 
+/*
+----------------------------
+CLASSES ROUTES 
+----------------------------
+*/
 
 /*
-    SEARCH opeartions for classes.
+    SEARCH operations
 */
 app.get('/', function(req, res)
 {
@@ -83,8 +91,9 @@ app.get('/classes', function(req, res)
     })
 });
 
-
-/* INSERT Operations for Classes */
+/*
+    INSERT Operations for Classes
+*/
 
 app.post('/add-class-ajax', function(req, res) 
     {
@@ -127,6 +136,7 @@ app.post('/add-class-ajax', function(req, res)
         })
     });
 
+
 /* DELETE OPERATION for Classes */
 
 app.delete('/delete-class-ajax', function(req,res,next){
@@ -159,6 +169,7 @@ app.delete('/delete-class-ajax', function(req,res,next){
                   })
               }
   })});
+
 
 /* UPDATE CLASS */
 
@@ -198,7 +209,211 @@ app.put('/put-class-ajax', function(req,res,next){
   })});
 
 /*
-    STUDENTS BACKEND
+----------------------------
+Departments ROUTES 
+----------------------------
+*/
+
+/*
+    SELECT operation
+*/ 
+app.get('/departments', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.className === undefined)
+    {
+        query1 = "SELECT * FROM Departments;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Departments WHERE departmentName LIKE "${req.query.departmentName}%"`
+    }
+
+    // Query 2 is the same in both cases
+    let query2 = "SELECT * FROM Departments;";
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fiels){
+
+        // Save the departments
+        let departments = rows
+
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+
+            // Save the departments
+            let departments = rows;
+            res.render('departments', {data: departments})
+        })
+    })
+});
+
+/*
+INSERT Operation
+*/
+app.post('/add-department-ajax', function(req, res) 
+    {
+        // Capture the incoming data and parse it back to a JS object
+        let data = req.body;
+    
+    
+        // Create the query and run it on the database
+        query1 = `INSERT INTO Departments (departmentName) VALUES ('${data.departmentName}')`;
+        db.pool.query(query1, function(error, rows, fields){
+    
+            // Check to see if there was an error
+            if (error) {
+    
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error)
+                res.sendStatus(400);
+            }
+            else
+            {
+                // If there was no error, perform a SELECT * on Departments
+                query2 = `SELECT * FROM Departments;`;
+                db.pool.query(query2, function(error, rows, fields){
+    
+                    // If there was an error on the second query, send a 400
+                    if (error) {
+                        
+                        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                        console.log(error);
+                        res.sendStatus(400);
+                    }
+                    // If all went well, send the results of the query back.
+                    else
+                    {
+                        res.send(rows);
+                    }
+                })
+            }
+        })
+    });
+
+/*
+DELETE Operation
+*/
+app.delete('/delete-department-ajax/', function(req,res,next){
+    let data = req.body;
+    let departmentID = parseInt(data.departmentID);
+    let deleteDepartment = `DELETE FROM Departments WHERE departmentID = ?`
+  
+          // Run the 1st query
+    db.pool.query(deleteDepartment, [departmentID], function(error, rows, fields){
+    if (error) {
+  
+        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+        console.log(error);
+        res.sendStatus(400);
+    }else {
+        res.sendStatus(204);
+    }
+  })});
+
+
+
+/*
+UPDATE Operation
+*/
+app.put('/put-department-ajax', function(req,res,next){
+    let data = req.body;
+    
+    let newDepartmentName = data.newDepartmentName;
+    let departmentID = data.departmentID;
+
+    let queryUpdateDepartment = `UPDATE Departments SET Departments.departmentName = ? WHERE Departments.departmentID= ?`;
+          // Run the 1st query
+          db.pool.query(queryUpdateDepartment, [newDepartmentName, departmentID], function(error, rows, fields){
+              if (error) {
+  
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error);
+                res.sendStatus(400);
+              }
+  
+              // If there was no error, update the row on the frontend 
+              else
+              {
+                res.send(rows);
+              }
+  })});
+
+
+/*
+----------------------------
+Professors ROUTES 
+----------------------------
+*/
+
+/*
+    SELECT operation
+*/ 
+app.get('/professors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.className === undefined)
+    {
+        query1 = "SELECT * FROM Professors;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Professors WHERE lastName LIKE "${req.query.lastName}%"`
+    }
+
+    // Query 2 is the same in both cases
+    let query2 = "SELECT * FROM Professors;";
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the departments
+        let professors = rows
+
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+
+            // Save the departments
+            let professors = rows;
+            res.render('professors', {data: professors})
+        })
+    })
+});
+
+/*
+----------------------------
+StudentsHasProfessors ROUTES 
+----------------------------
+*/
+app.get('/studentsHasProfessors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.studentsHasProfessorsID === undefined)
+    {
+        query1 = "SELECT * FROM Students_has_Professors;";
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the results
+        let studentsHasProfessors = rows;
+        res.render('students_has_professors', {data: studentsHasProfessors})
+    })
+});
+
+/*
+  STUDENTS ROUTES
 */
 
 app.get('/students', function(req, res)
@@ -397,8 +612,6 @@ app.post('/add-student-has-class-ajax', function (req, res)
 
 
 })
-
-
 
 /* LISTENER */
 app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
