@@ -1,6 +1,6 @@
+<!-- classes.hbs -->
+
 {{!-- Create a table --}}
-<h2>Classes </h2>
-    <p>This is our Classes Table, and we are demonstrating CRUD operations for this Table for Step 4 of the Project.</p>
 <table id="class-table" border = "1" cellpadding = "5">
     {{!-- Header section --}}
     <thead>
@@ -20,9 +20,9 @@
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{!-- For each row, print the classID, className, credit, departmentID, and professorID, in order --}}
         {{#each data}}
-        <tr data-value={{this.classID}}>
+        <tr data-value={{this.classID}}>>
             <td>{{this.classID}}</td>
             <td>{{this.className}}</td>
             <td>{{this.credit}}</td>
@@ -41,24 +41,28 @@
 
 <h2>Search for a Class</h2>
 <p>Search by the class name using the field below. Partial class names are OK too!</p>
-<form id = "search-class-html" method = 'GET' action = '/'>
+
+<form id = "search-class-html" method = 'GET' action = '/classes'>
+
     <label for "input-className">Search by Class Name: </label>
     <input type = "text" name = "className" id = "input-className-html-search">
 
     <input type = "submit">
-    <a href ='/classes'><button>Reset</button></a>
+    <a href = '/classes'><button>Reset</button></a>
+
 </form>
 
 {{!-- Form to add a record to the Classes table  --}}
 
 <h2>Add a Class</h2>
-<p>To add a new Class, please enter their information below and click 'Submit'!</p>
+
+<p>To add a new Class, please enter the information below and click 'Submit'!</p>
 <form id="add-class-form-ajax">
     <label for="input-className">Class Name: </label>
-    <input type="text" name="input-className" id="input-className">
+    <input type="text" name="input-className" id="input-className-ajax">
     
     <label for="input-credit">Credit: </label>
-    <input type="number" name="input-credit" id="input-credit">
+    <input type="number" name="input-credit" id="input-credit-ajax">
 
     <label for="input-departmentID">Department ID: </label>
     <select name = "input-departmentID" id = "input-departmentID-ajax">
@@ -69,7 +73,13 @@
     </select>
 
     <label for="input-professorID">Professor ID: </label>
-    <input type="number" name="input-professorID" id="input-professorID">
+
+    <select name = "input-professorID" id = "input-professorID-ajax">
+        <option value = "">Select a Professor</option>
+        {{#each professors}}
+        <option value = "{{this.professorID}}">{{this.lastName}}</option>
+        {{/each}}
+    </select>
 
     <input type="submit">
 </form>
@@ -84,7 +94,9 @@
 <form id="update-class-form-ajax">
 
     <label for="input-className">Class name: </label>
-    <select name="input-className" id="mySelect">
+
+    <select name="input-className" id="mySelectClass">
+
         <option value="test">Select a Class</option>
         {{#each data}}
         <option value="{{this.classID}}">{{this.className}}</option>
@@ -98,8 +110,10 @@
         <option value="{{this.professorID}}">{{this.lastName}}</option>
         {{/each}}
     </select>
+
     <input type="submit">
 
 </form>
+
 
 <script src="./js/update_class.js"></script>

@@ -1,0 +1,80 @@
+<!-- students_has_classes.hbs -->
+
+{{!-- Create a table --}}
+
+<table id = "student-has-class-table" border = "1" cellpadding = "5">
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the studentHasClassID, studentID, classID in order --}}
+        {{#each data}}
+        <tr data-value = {{this.studentHasClassID}}>>
+            <td>{{this.studentID}}</td>
+            <td>{{this.professorID}}</td>
+            <td><button onclick="deleteStudentHasClass({{this.studentHasClassID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_student_has_class.js"></script>
+
+{{!-- Form to search for a student record in the table --}}
+
+<h2>Search for a Student</h2>
+<p>Search for a Student by their last name using the field below. Partial last names are OK too!</p>
+<form id = "search-student-html" method = 'GET' action = '/'>
+    <label for "input-lastName">Search by Last Name: </label>
+    <input type = "text" name = "lastName" id = "input-lastName-html-search">
+
+    <input type = "submit">
+    <a href = '/students'><button>Reset</button></a>
+</form>
+
+{{!-- Form to add a record to the Students table  --}}
+
+<h2>Add a Student Has Class Association</h2>
+<p>To add a new Student Class Association, please enter their information below and click 'Submit'!</p>
+<form id="add-student-has-class-form-ajax">
+    <label for="input-studentID">Student ID: </label>
+    <input type="text" name="input-studentID" id="input-studentID-ajax">
+    
+    <label for="input-professorID">Professor ID: </label>
+    <input type = "text" name = "input-professorID" id = "input-professorID-ajax">
+
+    <input type="submit">
+</form>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_student_has_class.js"></script>
+
+{{!-- Form to Update the classID of a record in the Students_has_Classes table  --}}
+
+<h2>Updating A Student's Class </h2>
+<p>To update a specific Student's Class select the student last name from the drop-down menu on the left and input their desired class on the right.</p>
+
+<form id="update-student-has-class-form-ajax">
+
+    <label for="input-studentHasClassID">studentHasClassID: </label>
+    <input type = "number" name = "input-studentHasClassID" id = "mySelectStudentHasClass">
+
+    <label for="input-classID">Class ID</label>
+    <input type = "number" name = "input-classID" id = "input-classID-update">
+    
+    <input type="submit">
+
+</form>
+<script src="./js/update_student_has_class.js"></script>
