@@ -496,24 +496,70 @@ app.delete('/delete-professor-ajax/', function(req,res,next){
 StudentsHasProfessors ROUTES 
 ----------------------------
 */
-app.get('/studentsHasProfessors', function(req, res){
-    // Declare Query 1
-    let query1;
 
-    // If there is no query string, we just perform a basic SELECT
-    if (req.query.studentsHasProfessorsID === undefined)
-    {
-        query1 = "SELECT * FROM Students_has_Professors;";
-    }
+/*
+  SELECT Operation
+*/
+app.get('/studentsHasProfessors', function(req, res){
+    // Declare Queries
+    let query1 = "SELECT * FROM Students_has_Professors;"
+    let query2 = "SELECT * FROM Students;"
+    let query3 = "SELECT * FROM Professors;"
 
     // Run the 1st query
     db.pool.query(query1, function(error, rows, fields){
-
-        // Save the results
-        let studentsHasProfessors = rows;
-        res.render('students_has_professors', {data: studentsHasProfessors})
+        if(error){
+            console.log(error);
+            res.sendStatus(400)
+        } else{
+            let studentsHasProfessors = rows;
+            db.pool.query(query2, function(error, rows, fields){
+                if(error){
+                    console.log(error);
+                    res.sendStatus(400);
+            } else{
+                let students = rows;
+                db.pool.query(query3, function(error, rows, fields){
+                    if(error){
+                        console.log(error);
+                        res.sendStatus(400);
+                    } else{
+                        let professors = rows; 
+                        res.render('students_has_professors', {data: studentsHasProfessors, students: students, professors:professors})
+                    }
+                })
+            }})
+        }
     })
 });
+
+/*
+    INSERT Operation
+*/
+app.post('/add-studentHasProfessor-ajax', function(req, res){
+    let data = req.body;
+
+    const query1 = `INSERT INTO Students_has_Professors (studentID, professorID) VALUES (${data.studentID}, ${data.professorID})`;
+    console.log(query1);
+
+    db.pool.query(query1, function(error, rows, fields){
+        if(error){
+            console.log(error);
+            res.sendStatus(400);
+        }
+        else {
+            query2 = 'SELECT * FROM Students_has_Professors';
+            db.pool.query(query2, function(error, rows, fields){
+                if(error){
+                    console.log(error);
+                    res.sendStatus(400);
+                } else {
+                    res.send(rows);
+                }
+            })
+        }
+    })
+})
 
 /*
   STUDENTS ROUTES
