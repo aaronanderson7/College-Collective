@@ -1,7 +1,7 @@
 {{!-- Create a table --}}
 <h2>Professors</h2>
     <p>This is our Professors Table, and we are demonstrating CRUD operations for this Table</p>
-<table id="class-table" border = "1" cellpadding = "5">
+<table id="professor-table" border = "1" cellpadding = "5">
     {{!-- Header section --}}
     <thead>
 
@@ -20,7 +20,7 @@
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the departmentID and the departmentName --}}
+        {{!-- For each row, print the professorID, their last name, email, and department--}}
         {{#each data}}
         <tr data-value={{this.professorID}}>
             <td>{{this.professorID}}</td>
@@ -52,11 +52,11 @@
 <h2>Add a Professor</h2>
 <p>To add a new Professor, please enter their information below and click 'Submit'!</p>
 <form id="add-professor-form-ajax">
-    <label for="input-professorName">Professor Name: </label>
-    <input type="text" name="input-professorName" id="input-professorName">
-    
-    <label for="input-credit">Credit: </label>
-    <input type="number" name="input-credit" id="input-credit">
+    <label for="input-professorLastName">Last Name: </label>
+    <input type="text" name="input-professorLastName" id="input-professorLastName">
+
+    <label for="input-email">Email: </label>
+    <input type="text" name="input-email" id="input-email">
 
     <label for="input-departmentID">Department ID: </label>
     <select name = "input-departmentID" id = "input-departmentID-ajax">
@@ -65,9 +65,6 @@
         <option value = "{{this.departmentID}}">{{this.departmentName}}</option>
         {{/each}}
     </select>
-
-    <label for="input-professorID">Professor ID: </label>
-    <input type="number" name="input-professorID" id="input-professorID">
 
     <input type="submit">
 </form>
