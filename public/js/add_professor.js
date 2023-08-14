@@ -19,11 +19,12 @@ addProfessorForm.addEventListener("submit", function (e) {
 
     // Put our data we want to send in a javascript object
     let data = {
-        professorLastName: professorLastNameValue,
+        lastName: professorLastNameValue,
         email: emailValue,
         departmentID: departmentIDValue
     }
-    
+
+    console.log(data);    
     // Setup our AJAX request
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/add-professor-ajax", true);
@@ -71,6 +72,8 @@ addRowToTable = (data) => {
     let professorEmailCell = document.createElement("TD");
     let departmentCell = document.createElement("TD");
     let deleteCell = document.createElement("TD");
+
+    console.log(newRow);
 
     // Fill the cells with correct data
     professorIDCell.innerTExt = newRow.professorID;
