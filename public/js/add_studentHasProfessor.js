@@ -1,5 +1,5 @@
 // Get the objects we need to modify
-let addStudentHasProfessorForm = document.getElementById('add-studentHasProfessor-form-ajax');
+let addStudentHasProfessorForm = document.getElementById("add-studentHasProfessor-form-ajax");
 
 // Modify the objects we need
 addStudentHasProfessorForm.addEventListener("submit", function (e) {

@@ -562,6 +562,27 @@ app.post('/add-studentHasProfessor-ajax', function(req, res){
 })
 
 /*
+DELETE Operation
+*/
+app.delete('/delete-student-has-professor-ajax', function(req,res,next){
+    let data = req.body;
+    let studentHasProfessorID = data.studentHasProfessorID;
+    let deleteStudents_has_Professors = `DELETE FROM Students_has_Professors WHERE StudentHasProfessorID = ?`;
+    console.log(data);
+
+    db.pool.query(deleteStudents_has_Professors, [studentHasProfessorID], function(error, rows, fields){
+        if (error) {
+            // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+            console.log(error);
+            res.sendStatus(400);
+        }
+        else
+        {
+            res.sendStatus(204);
+        }
+  })});
+
+/*
   STUDENTS ROUTES
 */
 
