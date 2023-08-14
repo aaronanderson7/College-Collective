@@ -59,17 +59,25 @@
 <script src="./js/add_studentHasProfessor.js"></script>
 
 
-{{!-- Form to Update the Credit of a record in the Classes table  --}}
+{{!-- Form to Update the Credit of a record in the student_has_professors table  --}}
 
 <h2>Updating An Entry</h2>
-<p>To update a specific Department's name select the department name from the drop-down menu on the left and fill in the name on the right.</p>
-<form id="update-class-form-ajax">
+<p>To update a specific entry name select the ID from the drop-down menu on the left and fill in the fields on the right.</p>
+<form id="update-studentHasProfessor-form-ajax">
 
-    <label for="input-className">Class name: </label>
-    <select name="input-className" id="mySelect">
-        <option value="test">Select a Class</option>
+    <label for="input-studentHasProfessorID">ID to change: </label>
+    <select name="input-studentHasProfessorID" id="mySelect">
+        <option value="test">Select an ID to change </option>
         {{#each data}}
-        <option value="{{this.classID}}">{{this.className}}</option>
+        <option value="{{this.StudentHasProfessorID}}">{{this.StudentHasProfessorID}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-student">Student: </label>
+    <select name="input-student" id="input-student-update">
+        <option>Select a Student</option>
+        {{#each students}}
+        <option value="{{this.studentID}}">{{this.lastName}}</option>
         {{/each}}
     </select>
 
@@ -80,8 +88,9 @@
         <option value="{{this.professorID}}">{{this.lastName}}</option>
         {{/each}}
     </select>
+
     <input type="submit">
 
 </form>
 
-<script src="./js/update_class.js"></script>
+<script src="./js/update_studentHasProfessor.js"></script>

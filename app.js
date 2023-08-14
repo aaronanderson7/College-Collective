@@ -568,7 +568,6 @@ app.delete('/delete-student-has-professor-ajax', function(req,res,next){
     let data = req.body;
     let studentHasProfessorID = data.studentHasProfessorID;
     let deleteStudents_has_Professors = `DELETE FROM Students_has_Professors WHERE StudentHasProfessorID = ?`;
-    console.log(data);
 
     db.pool.query(deleteStudents_has_Professors, [studentHasProfessorID], function(error, rows, fields){
         if (error) {
