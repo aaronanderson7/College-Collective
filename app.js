@@ -433,6 +433,34 @@ app.post('/add-professor-ajax', function(req, res)
     });
 
 /*
+    UPDATE Operation
+*/
+    app.put('/put-professor-ajax', function(req,res,next){
+        let data = req.body;
+        
+        let professorID = data.professorID;
+        let newProfessorName = data.newProfessorName;
+        let newProfessorEmail = data.newProfessorEmail;
+        let newDepartmentID = data.newDepartmentID;
+
+        let queryUpdateDepartment = `UPDATE Professors SET Professors.lastName = ?, Professors.email = ?, Professors.departmentID = ? WHERE Professors.professorID = ?`;
+              // Run the 1st query
+              db.pool.query(queryUpdateDepartment, [newProfessorName, newProfessorEmail, newDepartmentID, professorID], function(error, rows, fields){
+                  if (error) {
+      
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                  }
+      
+                  // If there was no error, update the row on the frontend 
+                  else
+                  {
+                    res.send(rows);
+                  }
+      })});
+
+/*
 ----------------------------
 StudentsHasProfessors ROUTES 
 ----------------------------
