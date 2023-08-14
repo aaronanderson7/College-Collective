@@ -10,32 +10,24 @@ const db = require('./database/db-connector');
 /*
     SETUP
 */
-const express = require('express');   // We are using the express library for the web server
-const app     = express();            // We need to instantiate an express object to interact with the server in our code
+// We are using the express library for the web server
+const express = require('express');  
+const app = express();           
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 
+// Set a port number at the top so it's easy to change in the future
+PORT = process.env.PORT;                 
 
-PORT = process.env.PORT;                 // Set a port number at the top so it's easy to change in the future
-
+// Configurations of handlebars framework
 const { engine } = require('express-handlebars');
-const exphbs = require('express-handlebars');     // Import express-handlebars
-app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
-app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
+const exphbs = require('express-handlebars');    
+app.engine('.hbs', engine({extname: ".hbs"}));  
+app.set('view engine', '.hbs');                 
 
 /*
-    ROUTES
-*/
-
-/*
-----------------------------
-CLASSES ROUTES 
-----------------------------
-*/
-
-/*
-    SEARCH operations
+    Home Page
 */
 app.get('/', function(req, res)
 {
@@ -43,9 +35,14 @@ app.get('/', function(req, res)
 });
 
 /*
-    CLASSES BACKEND
+----------------------------
+CLASSES ROUTES 
+----------------------------
 */
 
+/* 
+    SELECT Operation 
+*/
 app.get('/classes', function(req, res)
 {
     // Declare Query 1
@@ -63,7 +60,7 @@ app.get('/classes', function(req, res)
         query1 = `SELECT * FROM Classes WHERE className LIKE "${req.query.className}%"`;
     }
 
-    // Query 2 is the same in both cases
+    // Query for Departments and Professors so the dropdowns on the frontend can be populated
     let query2 = "SELECT * FROM Departments;";
     let query3 = "SELECT * FROM Professors;";
 
@@ -73,18 +70,11 @@ app.get('/classes', function(req, res)
         // Save the classes
         let classes = rows
 
-        // Run the second query
         db.pool.query(query2, (error, rows, fields) => {
-
-            // Save the departments
             let departments = rows;
 
-            // Run the third query
             db.pool.query(query3, (error, rows, fields) => {
-                
-                // Save the professors
                 let professors = rows;
-
                 return res.render('classes', {data: classes, departments: departments, professors: professors});
             })
         })
@@ -92,7 +82,7 @@ app.get('/classes', function(req, res)
 });
 
 /*
-    INSERT Operations for Classes
+    INSERT Operation
 */
 
 app.post('/add-class-ajax', function(req, res) 
@@ -100,10 +90,8 @@ app.post('/add-class-ajax', function(req, res)
         // Capture the incoming data and parse it back to a JS object
         let data = req.body;
     
-        // Capture NULL values
     
         // Create the query and run it on the database
-
         query1 = `INSERT INTO Classes (className, credit, departmentID, professorID) VALUES ('${data.className}', '${data.credit}', ${data.departmentID}, ${data.professorID})`;
   
         db.pool.query(query1, function(error, rows, fields){
@@ -139,8 +127,9 @@ app.post('/add-class-ajax', function(req, res)
     });
 
 
-/* DELETE OPERATION for Classes */
-
+/* 
+    DELETE Operation
+*/
 app.delete('/delete-class-ajax', function(req,res,next){
     let data = req.body;
     let classID = parseInt(data.id);
@@ -173,8 +162,9 @@ app.delete('/delete-class-ajax', function(req,res,next){
   })});
 
 
-/* UPDATE CLASS */
-
+/* 
+    UPDATE Operation 
+*/
 app.put('/put-class-ajax', function(req,res,next){
     let data = req.body;
   
@@ -193,8 +183,7 @@ app.put('/put-class-ajax', function(req,res,next){
               res.sendStatus(400);
               }
   
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
-              // table on the front-end
+              // If there was no error, we run our second query and return that data so we can use it to update the Classes table
               else
               {
                   // Run the second query
@@ -217,7 +206,7 @@ Departments ROUTES
 */
 
 /*
-    SELECT operation
+    SELECT Operation
 */ 
 app.get('/departments', function(req, res){
     // Declare Query 1
@@ -262,7 +251,6 @@ app.post('/add-department-ajax', function(req, res)
         // Capture the incoming data and parse it back to a JS object
         let data = req.body;
     
-    
         // Create the query and run it on the database
         query1 = `INSERT INTO Departments (departmentName) VALUES ('${data.departmentName}')`;
         db.pool.query(query1, function(error, rows, fields){
@@ -305,7 +293,7 @@ app.delete('/delete-department-ajax/', function(req,res,next){
     let departmentID = parseInt(data.departmentID);
     let deleteDepartment = `DELETE FROM Departments WHERE departmentID = ?`
   
-          // Run the 1st query
+    // Run the 1st query
     db.pool.query(deleteDepartment, [departmentID], function(error, rows, fields){
     if (error) {
   
@@ -313,6 +301,7 @@ app.delete('/delete-department-ajax/', function(req,res,next){
         console.log(error);
         res.sendStatus(400);
     }else {
+        // send back a successful response
         res.sendStatus(204);
     }
   })});
@@ -338,7 +327,7 @@ app.put('/put-department-ajax', function(req,res,next){
                 res.sendStatus(400);
               }
   
-              // If there was no error, update the row on the frontend 
+              // If there was no error, update the row on the frontend, otherwise send data over
               else
               {
                 res.send(rows);
@@ -353,7 +342,7 @@ Professors ROUTES
 */
 
 /*
-    SELECT operation
+    SELECT Operation
 */ 
 app.get('/professors', function(req, res){
     // Declare Query 1
@@ -371,19 +360,19 @@ app.get('/professors', function(req, res){
         query1 = `SELECT * FROM Professors WHERE lastName LIKE "${req.query.lastName}%"`
     }
 
-    // Query 2 is the same in both cases
+    // Gets data from Departments table so it can be utilized in the dropdown menu on the frontend
     let query2 = "SELECT * FROM Departments;";
 
     // Run the 1st query
     db.pool.query(query1, function(error, rows, fields){
 
-        // Save the departments
+        // Save the professors
         let professors = rows;
 
         // Run the second query
         db.pool.query(query2, (error, rows, fields) => {
 
-            // Save the departments
+            // Save the departments and renders the page, passing over the professor and departments data
             let departments = rows;
             res.render('professors', {data: professors, departments: departments})
         })
@@ -437,7 +426,8 @@ app.post('/add-professor-ajax', function(req, res)
 */
 app.put('/put-professor-ajax', function(req,res,next){
     let data = req.body;
-        
+    
+    // Assigns all fields from the data object to appropriate variables
     let professorID = data.professorID;
     let newProfessorName = data.newProfessorName;
     let newProfessorEmail = data.newProfessorEmail;
@@ -466,9 +456,11 @@ DELETE Operation
 app.delete('/delete-professor-ajax/', function(req,res,next){
     let data = req.body;
     let professorID = parseInt(data.professorID);
+
+    // Queries to delete the M:N record from Students_has_Professors, and then delete the record from the Professors table
     let deleteStudents_has_Professors = `DELETE FROM Students_has_Professors WHERE professorID = ?`;
     let deleteProfessor = `DELETE FROM Professors WHERE professorID = ?`
-  
+    
     db.pool.query(deleteStudents_has_Professors, [professorID], function(error, rows, fields){
         if (error) {
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -501,7 +493,7 @@ StudentsHasProfessors ROUTES
   SELECT Operation
 */
 app.get('/studentsHasProfessors', function(req, res){
-    // Declare Queries
+    // Declare all queries necessary in order to populate dropdowns and acquire needed data from Students_has_Professors table
     let query1 = "SELECT * FROM Students_has_Professors;"
     let query2 = "SELECT * FROM Students;"
     let query3 = "SELECT * FROM Professors;"
@@ -513,17 +505,20 @@ app.get('/studentsHasProfessors', function(req, res){
             res.sendStatus(400)
         } else{
             let studentsHasProfessors = rows;
+            // run the 2nd query 
             db.pool.query(query2, function(error, rows, fields){
                 if(error){
                     console.log(error);
                     res.sendStatus(400);
             } else{
                 let students = rows;
+                // run the third query
                 db.pool.query(query3, function(error, rows, fields){
                     if(error){
                         console.log(error);
                         res.sendStatus(400);
                     } else{
+                        // renders the page and passes over all data collected by the queries
                         let professors = rows; 
                         res.render('students_has_professors', {data: studentsHasProfessors, students: students, professors:professors})
                     }
@@ -539,21 +534,24 @@ app.get('/studentsHasProfessors', function(req, res){
 app.post('/add-studentHasProfessor-ajax', function(req, res){
     let data = req.body;
 
+    // query to add record into the table
     const query1 = `INSERT INTO Students_has_Professors (studentID, professorID) VALUES (${data.studentID}, ${data.professorID})`;
-    console.log(query1);
 
+    // run the first query 
     db.pool.query(query1, function(error, rows, fields){
         if(error){
             console.log(error);
             res.sendStatus(400);
         }
         else {
+            // run the second query to get all records now that the table has been updated with a new record
             query2 = 'SELECT * FROM Students_has_Professors';
             db.pool.query(query2, function(error, rows, fields){
                 if(error){
                     console.log(error);
                     res.sendStatus(400);
                 } else {
+                    // sends rows back as a response
                     res.send(rows);
                 }
             })
@@ -590,10 +588,12 @@ app.put('/put-student-has-professor-ajax', function(req, res){
 DELETE Operation
 */
 app.delete('/delete-student-has-professor-ajax', function(req,res,next){
+    // Assigns all fields from the data object to appropriate variables
     let data = req.body;
     let studentHasProfessorID = data.studentHasProfessorID;
     let deleteStudents_has_Professors = `DELETE FROM Students_has_Professors WHERE StudentHasProfessorID = ?`;
 
+    // run delete query
     db.pool.query(deleteStudents_has_Professors, [studentHasProfessorID], function(error, rows, fields){
         if (error) {
             // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -602,6 +602,7 @@ app.delete('/delete-student-has-professor-ajax', function(req,res,next){
         }
         else
         {
+            // sends back success response code after delete is completed
             res.sendStatus(204);
         }
   })});
@@ -613,6 +614,9 @@ app.delete('/delete-student-has-professor-ajax', function(req,res,next){
 ----------------------------
 */
 
+/*
+  SELECT Operation
+*/
 app.get('/students', function(req, res)
     {  
         // Declare Query 1
@@ -629,23 +633,25 @@ app.get('/students', function(req, res)
         {
             query1 = `SELECT * FROM Students WHERE lastName LIKE "${req.query.lastName}%"`;
         }
-        
-        db.pool.query(query1, function(error, rows, fields){        // Execute the query
+
+         // Execute the query
+        db.pool.query(query1, function(error, rows, fields){       
             
             // Save the students
             let students = rows
             
-            res.render('students', {data: students});                   // Render the students.hbs file, and also send the renderer
-        })                                                          // an object where 'data' is equal to the 'rows' we
-});                                                                 // received back from the query
+            // Render the students.hbs file, and also send the renderer
+            res.render('students', {data: students});                   
+        })                                                          
+});                                                                 
 
-/* ADD STUDENT */
+/* 
+    INSERT Operation
+*/
 app.post('/add-student-ajax', function(req, res) 
     {
         // Capture the incoming data and parse it back to a JS object
         let data = req.body;
-    
-        // Capture NULL values
     
         // Create the query and run it on the database
         query1 = `INSERT INTO Students (lastName, email, startDate, graduationDate) VALUES ('${data.lastName}', '${data.email}', ${data.startDate}, ${data.graduationDate})`;
@@ -682,10 +688,15 @@ app.post('/add-student-ajax', function(req, res)
     });
 
 
-/* DELETE STUDENT */
+/*
+    DELETE Operation 
+*/
 app.delete('/delete-student-ajax', function(req,res,next){
+    // Assigns data from request to appropriate variables 
     let data = req.body;
     let studentID = parseInt(data.id);
+
+    // creates queries to DELETE data from all relevant locations for the table
     let deleteStudents_has_Classes = `DELETE FROM Students_has_Classes WHERE studentID = ?`;
     let deleteStudents_has_Professors = `DELETE FROM Students_has_Professors WHERE professorID = ?`;
     let deleteStudents = `DELETE FROM Students where studentID = ?`;
@@ -725,13 +736,16 @@ app.delete('/delete-student-ajax', function(req,res,next){
     });
 
 
-/* UPDATE STUDENT */
+/* 
+    UPDATE Operation
+*/
 app.put('/put-class-ajax', function(req,res,next){ 
+    // Assigns data from request to appropriate variables 
     let data = req.body;
-  
     let graduationDate = parseInt(data.graduationDate);
     let student = parseInt(data.student);
-  
+    
+    // defines update query 
     let queryUpdateGraduationDate = `UPDATE Students SET graduationDate = ? WHERE Students.studentID = ?`;
 
   
@@ -759,6 +773,9 @@ app.put('/put-class-ajax', function(req,res,next){
 --------------------------------
 */
 
+/*
+SELECT Operation
+*/
 app.get('/students-has-classes', function(req, res)
 {  
         let query1 = "SELECT * FROM Students_has_CLasses;";                 // Define our query
@@ -769,8 +786,9 @@ app.get('/students-has-classes', function(req, res)
         })                                                      // an object where 'data' is equal to the 'rows' we
 });  
 
-/* ADD Student_has_Classes */
-
+/* 
+    ADD Operation
+*/
 app.post('/add-student-has-class-ajax', function (req, res) 
 {
     // Capture the incoming data and parse it back to a JS object
