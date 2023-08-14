@@ -98,7 +98,7 @@ addRowToTable = (data) => {
     row.appendChild(creditCell);
     row.appendChild(departmentIDCell);
     row.appendChild(professorIDCell);
-
+    
     row.appendChild(deleteCell);
     
 
