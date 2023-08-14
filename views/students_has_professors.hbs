@@ -1,6 +1,6 @@
-<!-- classes.hbs -->
-
 {{!-- Create a table --}}
+<h2>Students Has Professors</h2>
+    <p>This is our Students_has_Professors M:N Table, and we are demonstrating CRUD operations for this Table</p>
 <table id="class-table" border = "1" cellpadding = "5">
     {{!-- Header section --}}
     <thead>
@@ -20,49 +20,41 @@
     {{!-- Body section --}}
     <tbody>
 
-        {{!-- For each row, print the classID, className, credit, departmentID, and professorID, in order --}}
+        {{!-- For each row, print the StudentHasProfessorID, the studentID, and the professorID --}}
         {{#each data}}
-        <tr data-value={{this.classID}}>>
-            <td>{{this.classID}}</td>
-            <td>{{this.className}}</td>
-            <td>{{this.credit}}</td>
-            <td>{{this.departmentID}}</td>
+        <tr data-value={{this.StudentHasProfessorID}}>
+            <td>{{this.StudentHasProfessorID}}</td>
+            <td>{{this.studentID}}</td>
             <td>{{this.professorID}}</td>
-            <td><button onclick="deleteClass({{this.classID}})">Delete</button></td>
+            <td><button onclick="deleteDepartment({{this.StudentHasProfessorsID}})">Delete</button></td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-<script src="./js/delete_class.js"></script>
+<script src="./js/delete_department.js"></script>
 
 
 {{!-- Form to search for a class record in the table --}}
-
-
-<h2>Search for a Class</h2>
-<p>Search by the class name using the field below. Partial class names are OK too!</p>
-
-<form id = "search-class-html" method = 'GET' action = '/classes'>
-
-    <label for "input-className">Search by Class Name: </label>
-    <input type = "text" name = "className" id = "input-className-html-search">
+<h2>Search for an Entry</h2>
+<p>Search by the department name using the field below. Partial class names are OK too!</p>
+<form id = "search-class-html" method = 'GET' action = '/'>
+    <label for "input-departmentName">Search by Class Name: </label>
+    <input type = "text" name = "departmentName" id = "input-departmentName-html-search">
 
     <input type = "submit">
-    <a href = '/classes'><button>Reset</button></a>
-
+    <a href ='/departments'><button>Reset</button></a>
 </form>
 
 {{!-- Form to add a record to the Classes table  --}}
 
-<h2>Add a Class</h2>
-
-<p>To add a new Class, please enter the information below and click 'Submit'!</p>
+<h2>Add an Entry</h2>
+<p>To add a new Department, please enter their information below and click 'Submit'!</p>
 <form id="add-class-form-ajax">
     <label for="input-className">Class Name: </label>
-    <input type="text" name="input-className" id="input-className-ajax">
+    <input type="text" name="input-className" id="input-className">
     
     <label for="input-credit">Credit: </label>
-    <input type="number" name="input-credit" id="input-credit-ajax">
+    <input type="number" name="input-credit" id="input-credit">
 
     <label for="input-departmentID">Department ID: </label>
     <select name = "input-departmentID" id = "input-departmentID-ajax">
@@ -73,13 +65,7 @@
     </select>
 
     <label for="input-professorID">Professor ID: </label>
-
-    <select name = "input-professorID" id = "input-professorID-ajax">
-        <option value = "">Select a Professor</option>
-        {{#each professors}}
-        <option value = "{{this.professorID}}">{{this.lastName}}</option>
-        {{/each}}
-    </select>
+    <input type="number" name="input-professorID" id="input-professorID">
 
     <input type="submit">
 </form>
@@ -89,14 +75,12 @@
 
 {{!-- Form to Update the Credit of a record in the Classes table  --}}
 
-<h2>Updating A Class's Professor Form</h2>
-<p>To update a specific Class's Professor ID select the class name from the drop-down menu on the left and their desired professor from the drop down menu on the right.</p>
+<h2>Updating An Entry</h2>
+<p>To update a specific Department's name select the department name from the drop-down menu on the left and fill in the name on the right.</p>
 <form id="update-class-form-ajax">
 
     <label for="input-className">Class name: </label>
-
-    <select name="input-className" id="mySelectClass">
-
+    <select name="input-className" id="mySelect">
         <option value="test">Select a Class</option>
         {{#each data}}
         <option value="{{this.classID}}">{{this.className}}</option>
@@ -110,10 +94,8 @@
         <option value="{{this.professorID}}">{{this.lastName}}</option>
         {{/each}}
     </select>
-
     <input type="submit">
 
 </form>
-
 
 <script src="./js/update_class.js"></script>

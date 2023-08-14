@@ -1,0 +1,106 @@
+{{!-- Create a table --}}
+<h2>Professors</h2>
+    <p>This is our Professors Table, and we are demonstrating CRUD operations for this Table</p>
+<table id="professor-table" border = "1" cellpadding = "5">
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the professorID, their last name, email, and department--}}
+        {{#each data}}
+        <tr data-value={{this.professorID}}>
+            <td>{{this.professorID}}</td>
+            <td>{{this.lastName}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.departmentID}}</td>
+            <td><button onclick="deleteProfessor({{this.professorID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_professor.js"></script>
+
+
+{{!-- Form to search for a class record in the table --}}
+
+
+<h2>Search for a Professor</h2>
+<p>Search by the professor's last name using the field below. Partial class names are OK too!</p>
+<form id = "search-professor-html" method = 'GET' action = '/'>
+    <label for "input-professorName">Search by Professor Last Name: </label>
+    <input type = "text" name = "professorName" id = "input-professorName-html-search">
+    <input type = "submit">
+    <a href ='/professors'><button>Reset</button></a>
+</form>
+
+{{!-- Form to add a record to the Classes table  --}}
+
+<h2>Add a Professor</h2>
+<p>To add a new Professor, please enter their information below and click 'Submit'!</p>
+<form id="add-professor-form-ajax">
+    <label for="input-professorLastName">Last Name: </label>
+    <input type="text" name="input-professorLastName" id="input-professorLastName">
+
+    <label for="input-email">Email: </label>
+    <input type="text" name="input-email" id="input-email">
+
+    <label for="input-departmentID">Department ID: </label>
+    <select name = "input-departmentID" id = "input-departmentID-ajax">
+        <option value = "">Select a Department</option>
+        {{#each departments}}
+        <option value = "{{this.departmentID}}">{{this.departmentName}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_professor.js"></script>
+
+
+{{!-- Form to Update the Credit of a record in the Classes table  --}}
+
+<h2>Updating A Professor Form</h2>
+<p>To update a specific professor select the professor name from the drop-down menu on the left and fill in the fields on the right.</p>
+<form id="update-professor-form-ajax">
+
+    <label for="input-professorName">Professer name: </label>
+    <select name="input-professerName" id="mySelect">
+        <option value="test">Select a Professor</option>
+        {{#each data}}
+        <option value="{{this.professorID}}">{{this.lastName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-newName">Last Name: </label>
+    <input type="text" name="input-newName" id="input-newName">
+    <label for="input-newEmail">Email: </label>
+    <input type="text" name="input-newEmail" id="input-newEmail">
+
+    <label for="department-select">New Department: </label>
+    <select name="department-select" id="department-select">
+        <option value="test">Select a Department</option>
+        {{#each departments}}
+        <option value="{{this.departmentID}}">{{this.departmentName}}</option>
+        {{/each}}
+    </select>
+    
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_professor.js"></script>

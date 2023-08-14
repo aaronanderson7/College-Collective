@@ -1,0 +1,64 @@
+{{!-- Create a table --}}
+<h2>Departments</h2>
+    <p>This is our Departments Table, and we are demonstrating CRUD operations for this Table</p>
+<table id="department-table" border = "1" cellpadding = "5">
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th>delete</th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the departmentID and the departmentName --}}
+        {{#each data}}
+        <tr data-value={{this.departmentID}}>
+            <td>{{this.departmentID}}</td>
+            <td>{{this.departmentName}}</td>
+            <td><button onclick="deleteDepartment({{this.departmentID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_department.js"></script>
+
+<h2>Add a Department</h2>
+<p>To add a new Department, please enter the information below and click 'Submit'!</p>
+<form id="add-department-form-ajax">
+    <label for="input-departmentName">Department Name:</label>
+    <input type="text" name="input-departmentName" id="input-departmentName">
+    <input type="submit">
+</form>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_department.js"></script>
+
+
+{{!-- Form to Update a Department --}}
+<h2>Updating A Department Form</h2>
+<p>To update a specific Department's name, select the department name from the drop-down menu on the left and fill in the new name you would like on the right.</p>
+<form id="update-department-form-ajax">
+
+    <label for="input-departmentName">Department Name: </label>
+    <select name="input-departmentName" id="mySelect">
+        <option value="test">Select a Department</option>
+        {{#each data}}
+        <option value="{{this.departmentID}}">{{this.departmentName}}</option>
+        {{/each}}
+    </select>
+    <label for="input-newDepartmentName">New Department Name</label>
+    <input type="text" name="input-newDepartmentName" id="input-newDepartmentName">
+    
+    <input type="submit">
+
+</form>
+<script src="./js/update_department.js"></script>
