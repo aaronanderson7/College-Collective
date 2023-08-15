@@ -1,7 +1,11 @@
 {{!-- Create a table --}}
 <h2>Students Has Professors</h2>
     <p>This is our Students_has_Professors M:N Table, and we are demonstrating CRUD operations for this Table</p>
+<<<<<<< HEAD
 <table id="class-table" border = "1" cellpadding = "5">
+=======
+<table id="student-has-professor-table" border = "1" cellpadding = "5">
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
     {{!-- Header section --}}
     <thead>
 
@@ -26,11 +30,16 @@
             <td>{{this.StudentHasProfessorID}}</td>
             <td>{{this.studentID}}</td>
             <td>{{this.professorID}}</td>
+<<<<<<< HEAD
             <td><button onclick="deleteDepartment({{this.StudentHasProfessorsID}})">Delete</button></td>
+=======
+            <td><button onclick="deleteStudentHasProfessor({{this.StudentHasProfessorID}})">Delete</button></td>
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
         </tr>
         {{/each}}
     </tbody>
 </table>
+<<<<<<< HEAD
 <script src="./js/delete_department.js"></script>
 
 
@@ -61,15 +70,38 @@
         <option value = "">Select a Department</option>
         {{#each departments}}
         <option value = "{{this.departmentID}}">{{this.departmentName}}</option>
+=======
+<script src="./js/delete_studentHasProfessor.js"></script>
+
+{{!-- Form to add a record to the table  --}}
+<h2>Add an Entry</h2>
+<p>To add a new record, please enter their information below and click 'Submit'!</p>
+<form id="add-studentHasProfessor-form-ajax">
+    <label for="input-studentID">Student ID: </label>
+    <select name = "input-studentID" id = "input-studentID-ajax">
+        <option value = "">Select a Student</option>
+        {{#each students}}
+        <option value = "{{this.studentID}}">{{this.lastName}}</option>
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
         {{/each}}
     </select>
 
     <label for="input-professorID">Professor ID: </label>
+<<<<<<< HEAD
     <input type="number" name="input-professorID" id="input-professorID">
+=======
+    <select name = "input-professorID" id = "input-professorID-ajax">
+        <option value = "">Select a Professor</option>
+        {{#each professors}}
+        <option value = "{{this.professorID}}">{{this.lastName}}</option>
+        {{/each}}
+    </select>
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 
     <input type="submit">
 </form>
 {{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<<<<<<< HEAD
 <script src="./js/add_class.js"></script>
 
 
@@ -84,6 +116,30 @@
         <option value="test">Select a Class</option>
         {{#each data}}
         <option value="{{this.classID}}">{{this.className}}</option>
+=======
+<script src="./js/add_studentHasProfessor.js"></script>
+
+
+{{!-- Form to Update the Credit of a record in the student_has_professors table  --}}
+
+<h2>Updating An Entry</h2>
+<p>To update a specific entry name select the ID from the drop-down menu on the left and fill in the fields on the right.</p>
+<form id="update-studentHasProfessor-form-ajax">
+
+    <label for="input-studentHasProfessorID">ID to change: </label>
+    <select name="input-studentHasProfessorID" id="mySelectStudentHasProfessor">
+        <option value="test">Select an ID to change </option>
+        {{#each data}}
+        <option value="{{this.StudentHasProfessorID}}">{{this.StudentHasProfessorID}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-student">Student: </label>
+    <select name="input-student" id="input-student-update">
+        <option>Select a Student</option>
+        {{#each students}}
+        <option value="{{this.studentID}}">{{this.lastName}}</option>
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
         {{/each}}
     </select>
 
@@ -94,8 +150,16 @@
         <option value="{{this.professorID}}">{{this.lastName}}</option>
         {{/each}}
     </select>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
     <input type="submit">
 
 </form>
 
+<<<<<<< HEAD
 <script src="./js/update_class.js"></script>
+=======
+<script src="./js/update_studentHasProfessor.js"></script>
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
