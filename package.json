@@ -15,11 +15,9 @@
     "forever": "^4.0.3",
     "mysql": "^2.18.1"
   },
-
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aaronanderson7/CS340_Portfolio.git"
@@ -28,5 +26,4 @@
     "url": "https://github.com/aaronanderson7/CS340_Portfolio/issues"
   },
   "homepage": "https://github.com/aaronanderson7/CS340_Portfolio#readme"
-
 }

@@ -10,6 +10,16 @@ const db = require('./database/db-connector');
 /*
     SETUP
 */
+<<<<<<< HEAD
+const express = require('express');   // We are using the express library for the web server
+const app     = express();            // We need to instantiate an express object to interact with the server in our code
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static('public'));
+
+
+PORT = process.env.PORT;                 // Set a port number at the top so it's easy to change in the future
+=======
 // We are using the express library for the web server
 const express = require('express');  
 const app = express();           
@@ -19,15 +29,35 @@ app.use(express.static('public'));
 
 // Set a port number at the top so it's easy to change in the future
 PORT = process.env.PORT;                 
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 
 // Configurations of handlebars framework
 const { engine } = require('express-handlebars');
+<<<<<<< HEAD
+const exphbs = require('express-handlebars');     // Import express-handlebars
+app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
+app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
+
+/*
+    ROUTES
+*/
+
+/*
+----------------------------
+CLASSES ROUTES 
+----------------------------
+*/
+
+/*
+    SEARCH operations
+=======
 const exphbs = require('express-handlebars');    
 app.engine('.hbs', engine({extname: ".hbs"}));  
 app.set('view engine', '.hbs');                 
 
 /*
     Home Page
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 */
 app.get('/', function(req, res)
 {
@@ -82,7 +112,11 @@ app.get('/classes', function(req, res)
 });
 
 /*
+<<<<<<< HEAD
+    INSERT Operations for Classes
+=======
     INSERT Operation
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 */
 
 app.post('/add-class-ajax', function(req, res) 
@@ -92,6 +126,7 @@ app.post('/add-class-ajax', function(req, res)
     
     
         // Create the query and run it on the database
+
         query1 = `INSERT INTO Classes (className, credit, departmentID, professorID) VALUES ('${data.className}', '${data.credit}', ${data.departmentID}, ${data.professorID})`;
   
         db.pool.query(query1, function(error, rows, fields){
@@ -126,6 +161,11 @@ app.post('/add-class-ajax', function(req, res)
         })
     });
 
+<<<<<<< HEAD
+
+/* DELETE OPERATION for Classes */
+=======
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 
 /* 
     DELETE Operation
@@ -161,6 +201,11 @@ app.delete('/delete-class-ajax', function(req,res,next){
               }
   })});
 
+<<<<<<< HEAD
+
+/* UPDATE CLASS */
+=======
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 
 /* 
     UPDATE Operation 
@@ -206,7 +251,11 @@ Departments ROUTES
 */
 
 /*
+<<<<<<< HEAD
+    SELECT operation
+=======
     SELECT Operation
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 */ 
 app.get('/departments', function(req, res){
     // Declare Query 1
@@ -251,6 +300,10 @@ app.post('/add-department-ajax', function(req, res)
         // Capture the incoming data and parse it back to a JS object
         let data = req.body;
     
+<<<<<<< HEAD
+    
+=======
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
         // Create the query and run it on the database
         query1 = `INSERT INTO Departments (departmentName) VALUES ('${data.departmentName}')`;
         db.pool.query(query1, function(error, rows, fields){
@@ -293,7 +346,11 @@ app.delete('/delete-department-ajax/', function(req,res,next){
     let departmentID = parseInt(data.departmentID);
     let deleteDepartment = `DELETE FROM Departments WHERE departmentID = ?`
   
+<<<<<<< HEAD
+          // Run the 1st query
+=======
     // Run the 1st query
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
     db.pool.query(deleteDepartment, [departmentID], function(error, rows, fields){
     if (error) {
   
@@ -301,7 +358,10 @@ app.delete('/delete-department-ajax/', function(req,res,next){
         console.log(error);
         res.sendStatus(400);
     }else {
+<<<<<<< HEAD
+=======
         // send back a successful response
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
         res.sendStatus(204);
     }
   })});
@@ -327,7 +387,11 @@ app.put('/put-department-ajax', function(req,res,next){
                 res.sendStatus(400);
               }
   
+<<<<<<< HEAD
+              // If there was no error, update the row on the frontend 
+=======
               // If there was no error, update the row on the frontend, otherwise send data over
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
               else
               {
                 res.send(rows);
@@ -339,6 +403,145 @@ app.put('/put-department-ajax', function(req,res,next){
 ----------------------------
 Professors ROUTES 
 ----------------------------
+<<<<<<< HEAD
+*/
+
+/*
+    SELECT operation
+*/ 
+app.get('/professors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.className === undefined)
+    {
+        query1 = "SELECT * FROM Professors;";
+    }
+
+    // If there is a query string, we assume this is a search, and return desired results
+    else
+    {
+        query1 = `SELECT * FROM Professors WHERE lastName LIKE "${req.query.lastName}%"`
+    }
+
+    // Query 2 is the same in both cases
+    let query2 = "SELECT * FROM Departments;";
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the departments
+        let professors = rows;
+
+        // Run the second query
+        db.pool.query(query2, (error, rows, fields) => {
+
+            // Save the departments
+            let departments = rows;
+            res.render('professors', {data: professors, departments: departments})
+        })
+    })
+});
+
+/*
+    INSERT Operation 
+*/
+app.post('/add-professor-ajax', function(req, res) 
+    {
+        // Capture the incoming data and parse it back to a JS object
+        let data = req.body;
+    
+        // Create the query and run it on the database
+        const query1 = `INSERT INTO Professors (lastName, email, departmentID) VALUES ('${data.lastName}', '${data.email}', ${data.departmentID})`;
+        db.pool.query(query1, function(error, rows, fields){
+    
+            // Check to see if there was an error
+            if (error) {
+    
+                // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                console.log(error)
+                res.sendStatus(400);
+            }
+            else
+            {
+                // If there was no error, perform a SELECT * on Professors
+                query2 = `SELECT * FROM Professors;`;
+                db.pool.query(query2, function(error, rows, fields){
+    
+                    // If there was an error on the second query, send a 400
+                    if (error) {
+                        
+                        // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                        console.log(error);
+                        res.sendStatus(400);
+                    }
+                    // If all went well, send the results of the query back.
+                    else
+                    {
+                        res.send(rows);
+                    }
+                })
+            }
+        })
+    });
+
+/*
+    UPDATE Operation
+*/
+    app.put('/put-professor-ajax', function(req,res,next){
+        let data = req.body;
+        
+        let professorID = data.professorID;
+        let newProfessorName = data.newProfessorName;
+        let newProfessorEmail = data.newProfessorEmail;
+        let newDepartmentID = data.newDepartmentID;
+
+        let queryUpdateDepartment = `UPDATE Professors SET Professors.lastName = ?, Professors.email = ?, Professors.departmentID = ? WHERE Professors.professorID = ?`;
+              // Run the 1st query
+              db.pool.query(queryUpdateDepartment, [newProfessorName, newProfessorEmail, newDepartmentID, professorID], function(error, rows, fields){
+                  if (error) {
+      
+                    // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                    console.log(error);
+                    res.sendStatus(400);
+                  }
+      
+                  // If there was no error, update the row on the frontend 
+                  else
+                  {
+                    res.send(rows);
+                  }
+      })});
+
+/*
+----------------------------
+StudentsHasProfessors ROUTES 
+----------------------------
+*/
+app.get('/studentsHasProfessors', function(req, res){
+    // Declare Query 1
+    let query1;
+
+    // If there is no query string, we just perform a basic SELECT
+    if (req.query.studentsHasProfessorsID === undefined)
+    {
+        query1 = "SELECT * FROM Students_has_Professors;";
+    }
+
+    // Run the 1st query
+    db.pool.query(query1, function(error, rows, fields){
+
+        // Save the results
+        let studentsHasProfessors = rows;
+        res.render('students_has_professors', {data: studentsHasProfessors})
+    })
+});
+
+/*
+  STUDENTS ROUTES
+=======
+>>>>>>> d4a4ee4210b3c60c2fc533b673ade66adbcbd758
 */
 
 /*
